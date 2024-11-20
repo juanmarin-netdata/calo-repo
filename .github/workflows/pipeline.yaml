@@ -1,7 +1,7 @@
 on: [ push, workflow_dispatch ]
 
 env:
-  IMAGE_NAME: 'Imagen de Arnoldo'
+  IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
 
 jobs:
   build-and-scan:
