@@ -1,14 +1,13 @@
-# syntax=docker/dockerfile:1
-FROM ubuntu:22.04
+FROM debian
+MAINTAINER José Domingo Muñoz "josedom24@gmail.com"
 
-# install app dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN pip install flask==3.0.*
+RUN apt-get update && apt-get install -y apache2 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# install app
-COPY hello.py /
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 
-# final configuration
-ENV FLASK_APP=hello
-EXPOSE 8000
-CMD ["flask", "run", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 80
+ADD ["index.html","/var/www/html/"]
+
+ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
